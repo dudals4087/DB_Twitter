@@ -1,0 +1,755 @@
+/* 기본 레이아웃 */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #050505;
+}
+
+a {
+    color: #1877f2;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 앱 전체 틀 */
+
+.app-shell {
+    min-height: 100vh;
+}
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 56px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddfe2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.app-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-logo {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1877f2;
+}
+
+.app-logo-sub {
+    font-size: 13px;
+    color: #65676b;
+}
+
+.app-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background-color: #e4e6eb;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #050505;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.icon-btn:hover {
+    background-color: #d8dadf;
+}
+
+/* 메인 2컬럼 레이아웃 */
+
+.main-layout {
+    max-width: 1120px;
+    margin: 16px auto;
+    display: grid;
+    grid-template-columns: minmax(0, 640px) 320px;
+    gap: 16px;
+}
+
+.column-center {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.column-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 카드 공통 */
+
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    padding: 12px 14px;
+}
+
+.section-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.helper-text {
+    font-size: 12px;
+    color: #65676b;
+    line-height: 1.5;
+}
+
+/* 버튼들 */
+
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-danger,
+.btn-tab,
+.btn-sm,
+.btn-xs,
+.chat-send-btn {
+    font-family: inherit;
+}
+
+.btn-primary {
+    background-color: #1877f2;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #166fe0;
+}
+
+.btn-secondary {
+    background-color: #42b72a;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #36a420;
+}
+
+.btn-ghost {
+    background-color: #e4e6eb;
+    color: #050505;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-ghost:hover {
+    background-color: #d8dadf;
+}
+
+.btn-danger {
+    background-color: #e41e3f;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c81535;
+}
+
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+.btn-xs {
+    padding: 2px 8px;
+    font-size: 11px;
+}
+
+/* 탭 버튼 (팔로워/팔로잉) */
+
+.btn-tab {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    background-color: #e4e6eb;
+    font-size: 12px;
+    color: #050505;
+    text-decoration: none;
+}
+
+.btn-tab.active {
+    background-color: #1877f2;
+    border-color: #1877f2;
+    color: #ffffff;
+}
+
+/* 아바타 */
+
+.avatar-sm,
+.avatar-lg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #e4e6eb;
+    color: #050505;
+    font-weight: 700;
+}
+
+.avatar-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+}
+
+.avatar-lg {
+    width: 64px;
+    height: 64px;
+    font-size: 24px;
+}
+
+.avatar-sm-link {
+    display: inline-block;
+    text-decoration: none;
+}
+
+/* 체크 배지 */
+
+.badge-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #42b72a;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* 입력 폼 */
+
+.form-field {
+    margin-bottom: 8px;
+}
+
+.form-label {
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #050505;
+}
+
+.input-text {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #ccd0d5;
+    font-size: 13px;
+    outline: none;
+}
+
+.input-text:focus {
+    border-color: #1877f2;
+}
+
+/* 글 작성 텍스트 박스  고정 높이 */
+
+.post-input {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccd0d5;
+    border-radius: 16px;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    background-color: #f0f2f5;
+    height: 120px;      /* 길게 고정 */
+    resize: none;       /* 크기 조절 불가 */
+    overflow-y: auto;   /* 내용 많으면 내부 스크롤 */
+}
+
+/* 댓글 입력 */
+
+.comment-input {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    border-radius: 16px;
+    border: 1px solid #ccd0d5;
+    font-size: 13px;
+    outline: none;
+    background-color: #f0f2f5;
+}
+
+.comment-input:focus {
+    border-color: #1877f2;
+}
+
+.comment-btn {
+    border: none;
+    background-color: #1877f2;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* 포스트 카드 */
+
+.post-card {
+    border-top: 1px solid #e4e6eb;
+    padding-top: 8px;
+    margin-top: 8px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-user {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.post-username-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.username-link {
+    color: #050505;
+}
+
+.post-meta {
+    font-size: 13px;
+    color: #65676b;
+}
+
+.post-content {
+    margin-top: 6px;
+    font-size: 15px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.post-footer {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #65676b;
+}
+
+/* 댓글 프리뷰 (타임라인 아래쪽) */
+
+.comment-preview {
+    margin-top: 6px;
+    border-top: 1px solid #e4e6eb;
+    padding-top: 6px;
+}
+
+.comment-form-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 유저 추천 / 팔로우 리스트 카드 공통 */
+
+.user-suggest-item,
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.user-suggest-item:last-child,
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-suggest-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-status {
+    font-size: 11px;
+    color: #65676b;
+}
+
+/* 메시지 레이아웃 */
+
+.messages-layout {
+    max-width: 1120px;
+    margin: 16px auto;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 16px;
+}
+
+.messages-left {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 88px);
+    min-height: 480px;
+}
+
+.messages-right {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 88px);
+    min-height: 480px;
+}
+
+.list-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e4e6eb;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.user-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+}
+
+.user-item.active {
+    background-color: #e7f3ff;
+    border-radius: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+/* 채팅 영역 */
+
+.chat-header {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e4e6eb;
+}
+
+.chat-title {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.chat-subtitle {
+    font-size: 12px;
+    color: #65676b;
+    margin-top: 2px;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 10px 12px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.chat-row {
+    display: flex;
+    width: 100%;
+}
+
+.chat-row.me {
+    justify-content: flex-end;
+}
+
+.chat-row.other {
+    justify-content: flex-start;
+}
+
+.chat-bubble {
+    max-width: 70%;
+    padding: 6px 10px;
+    border-radius: 16px;
+    font-size: 13px;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.chat-bubble.me {
+    background-color: #0084ff;
+    color: #ffffff;
+    border-bottom-right-radius: 4px;
+}
+
+.chat-bubble.other {
+    background-color: #e4e6eb;
+    color: #050505;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-meta {
+    font-size: 11px;
+    color: #65676b;
+    margin-top: 2px;
+}
+
+.chat-meta.me {
+    text-align: right;
+}
+
+.chat-meta.other {
+    text-align: left;
+}
+
+.chat-input-bar {
+    border-top: 1px solid #e4e6eb;
+    padding: 8px 10px;
+}
+
+.chat-input-form {
+    display: flex;
+    gap: 6px;
+}
+
+.chat-input {
+    flex: 1;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    border-radius: 16px;
+    border: 1px solid #ccd0d5;
+    font-size: 13px;
+    outline: none;
+    background-color: #f0f2f5;
+}
+
+.chat-input:focus {
+    border-color: #1877f2;
+}
+
+.chat-send-btn {
+    border: none;
+    background-color: #1877f2;
+    color: #ffffff;
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* 메시지 박스 */
+
+.msg {
+    margin-top: 6px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.msg-ok {
+    background-color: #e7f3ff;
+    color: #1d3c78;
+}
+
+.msg-err {
+    background-color: #fdecea;
+    color: #b3261e;
+}
+
+/* 링크 스타일 */
+
+.link-plain {
+    color: #050505;
+    text-decoration: none;
+}
+
+.link-plain:hover {
+    text-decoration: underline;
+}
+
+/* 메인 글쓰기 박스 강제 스타일 */
+textarea.post-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border: 1px solid #ccd0d5 !important;
+    border-radius: 16px !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    background-color: #f0f2f5 !important;
+    height: 120px !important;      /* 길게 고정 */
+    resize: none !important;       /* 크기 조절 불가 */
+    overflow-y: auto !important;   /* 내용 많으면 내부 스크롤 */
+}
+
+/* 포스트 하단 메타 줄 */
+
+.post-footer-row {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #65676b;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.post-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.post-meta-link {
+    font-size: 12px;
+    color: #1877f2;
+}
+
+/* 포스트 액션 바  좋아요 + 댓글 입력 */
+
+.post-actions-bar {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid #e4e6eb;
+}
+
+.post-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.post-like-btn-inline {
+    border: none;
+    background: transparent;
+    color: #65676b;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.post-like-btn-inline:hover {
+    background-color: #e4e6eb;
+}
+
+.post-comment-inline {
+    flex: 1;
+    display: flex;
+    gap: 6px;
+    margin: 0;
+}
+
+.comment-text {
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* 공통 좋아요 버튼: 초록색 배경 + 흰 글씨 */
+.btn-like {
+    display: inline-block;
+    padding: 4px 12px;
+    border: none;
+    border-radius: 999px;
+    background-color: #42b72a; /* 초록색 */
+    color: #ffffff;           /* 흰색 글씨 */
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+.btn-like.btn-xs {
+    padding: 3px 10px;
+    font-size: 11px;
+}
+
+.btn-like:hover {
+    background-color: #36a420;
+}
+
+/* 댓글 들여쓰기용 대댓글 영역 */
+.reply-item {
+    margin-left: 40px;   /* 들여쓰기 */
+    margin-top: 8px;
+}
+
+/* 공통 버튼 스타일이 이미 있다고 가정 */
+.btn-danger {
+    background-color: #e53935;   /* 진한 빨강 */
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;        /* 다른 버튼처럼 pill 형태 */
+    padding: 4px 12px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-danger:hover {
+    background-color: #c62828;   /* hover 시 조금 더 진하게 */
+}
+
+/* 작은 삭제 버튼용 */
+.btn-danger.btn-xs {
+    padding: 2px 8px;
+    font-size: 11px;
+}
+
+/* 글 삭제 버튼(조금 더 크게) */
+.btn-danger.btn-sm {
+    padding: 4px 14px;
+    font-size: 12px;
+}
