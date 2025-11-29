@@ -1,186 +1,119 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-         import="java.sql.*, java.util.UUID, java.net.URLEncoder" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.sql.*, java.util.UUID" %>
 <%@ include file="dbconn.jsp" %>
 <%
     request.setCharacterEncoding("UTF-8");
 
     String currentUser = (String) session.getAttribute("currentUser");
-    if (currentUser == null || currentUser.trim().isEmpty()) {
-        if (con != null) {
-            try { con.close(); } catch (Exception ignore) {}
-        }
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
     String targetId = request.getParameter("target_id");
-    if (targetId != null) targetId = targetId.trim();
 
-    if (targetId == null || targetId.isEmpty() || targetId.equals(currentUser)) {
-        if (con != null) {
-            try { con.close(); } catch (Exception ignore) {}
-        }
-        response.sendRedirect("main.jsp");
+    // 1. 로그인 체크
+    if (currentUser == null) {
+        out.println("<script>alert('로그인이 필요합니다.'); location.href='login.jsp';</script>");
         return;
     }
 
-    String isPrivate = "F";
-    boolean targetExists = false;
+    // 2. 돌아갈 페이지 주소 정리
+    String referer = request.getHeader("Referer");
+    if (referer == null) referer = "main.jsp";
+    if (referer.contains("#")) referer = referer.substring(0, referer.indexOf("#"));
 
-    // 타겟 유저 정보 조회  비밀계정 여부
+    if (targetId == null || targetId.isEmpty() || currentUser.equals(targetId)) {
+        response.sendRedirect(referer);
+        return;
+    }
+
     try {
-        String usql =
-            "SELECT is_private FROM users WHERE user_id = ?";
-        try (PreparedStatement ps = con.prepareStatement(usql)) {
+        // [1단계] 상대방 비공개 여부 확인
+        boolean isPrivate = false;
+        String userCheckSql = "SELECT is_private FROM users WHERE user_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(userCheckSql)) {
             ps.setString(1, targetId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    targetExists = true;
-                    isPrivate = rs.getString("is_private");
-                    if (isPrivate == null) isPrivate = "F";
+                    String p = rs.getString("is_private");
+                    if ("T".equals(p)) isPrivate = true;
                 }
             }
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
 
-    if (!targetExists) {
-        if (con != null) {
-            try { con.close(); } catch (Exception ignore) {}
+        // [2단계] 현재 상태 확인
+        boolean isFollowing = false;
+        boolean isRequested = false;
+
+        String fCheck = "SELECT 1 FROM followings WHERE user_id = ? AND follower_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(fCheck)) {
+            ps.setString(1, targetId);
+            ps.setString(2, currentUser);
+            try (ResultSet rs = ps.executeQuery()) { if (rs.next()) isFollowing = true; }
         }
-        response.sendRedirect("main.jsp");
-        return;
-    }
 
-    boolean alreadyFollowing = false;
+        String rCheck = "SELECT 1 FROM follow_requests WHERE target_id = ? AND requester_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(rCheck)) {
+            ps.setString(1, targetId);
+            ps.setString(2, currentUser);
+            try (ResultSet rs = ps.executeQuery()) { if (rs.next()) isRequested = true; }
+        }
 
-    try {
-        // 이미 팔로우 중인지 확인
-        String chkSql =
-            "SELECT 1 FROM followings " +
-            "WHERE user_id = ? AND follower_id = ?";
-        try (PreparedStatement ps = con.prepareStatement(chkSql)) {
-            ps.setString(1, currentUser);
-            ps.setString(2, targetId);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) alreadyFollowing = true;
+        // [3단계] 로직 실행
+        if (isFollowing) {
+            // [A] 언팔로우 (삭제)
+            String delSql = "DELETE FROM followings WHERE user_id = ? AND follower_id = ?";
+            try (PreparedStatement ps = con.prepareStatement(delSql)) {
+                ps.setString(1, targetId);
+                ps.setString(2, currentUser);
+                ps.executeUpdate();
             }
-        }
-
-        boolean oldAuto = con.getAutoCommit();
-        con.setAutoCommit(false);
-
-        try {
-            if (alreadyFollowing) {
-                // 언팔로우  (공개/비밀 계정 공통)
-                String del1 = "DELETE FROM followings WHERE user_id = ? AND follower_id = ?";
-                try (PreparedStatement ps = con.prepareStatement(del1)) {
-                    ps.setString(1, currentUser);
+        } 
+        else if (isRequested) {
+            // [B] 요청 취소 (삭제)
+            String delReq = "DELETE FROM follow_requests WHERE target_id = ? AND requester_id = ?";
+            try (PreparedStatement ps = con.prepareStatement(delReq)) {
+                ps.setString(1, targetId);
+                ps.setString(2, currentUser);
+                ps.executeUpdate();
+            }
+        } 
+        else {
+            // [C] 새로 연결
+            if (isPrivate) {
+                // [C-1] 비공개 계정 -> 요청 (날짜 제거함)
+                String reqId = "r" + UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+                String insReq = "INSERT INTO follow_requests (req_id, target_id, requester_id) VALUES (?, ?, ?)";
+                try (PreparedStatement ps = con.prepareStatement(insReq)) {
+                    ps.setString(1, reqId);
                     ps.setString(2, targetId);
+                    ps.setString(3, currentUser);
                     ps.executeUpdate();
                 }
-
-                String del2 = "DELETE FROM follower WHERE user_id = ? AND follower_id = ?";
-                try (PreparedStatement ps = con.prepareStatement(del2)) {
-                    ps.setString(1, targetId);
-                    ps.setString(2, currentUser);
-                    ps.executeUpdate();
-                }
-
-                // 혹시 남아 있을지 모르는 팔로우 요청도 정리
-                String delReq =
-                    "DELETE FROM follow_requests " +
-                    "WHERE requester_id = ? AND target_id = ?";
-                try (PreparedStatement ps = con.prepareStatement(delReq)) {
-                    ps.setString(1, currentUser);
-                    ps.setString(2, targetId);
-                    ps.executeUpdate();
-                }
-
             } else {
-                // 아직 팔로우 중이 아님
-                if ("T".equals(isPrivate)) {
-                    // 비밀 계정  → 팔로우 요청만 생성
-                    // 이미 요청이 있는지 확인
-                    boolean alreadyRequested = false;
-                    String rchk =
-                        "SELECT 1 FROM follow_requests " +
-                        "WHERE requester_id = ? AND target_id = ?";
-                    try (PreparedStatement ps = con.prepareStatement(rchk)) {
-                        ps.setString(1, currentUser);
-                        ps.setString(2, targetId);
-                        try (ResultSet rs = ps.executeQuery()) {
-                            if (rs.next()) alreadyRequested = true;
-                        }
-                    }
-
-                    if (!alreadyRequested) {
-                        String rid = "frq" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-                        String rsql =
-                            "INSERT INTO follow_requests (req_id, requester_id, target_id) " +
-                            "VALUES (?, ?, ?)";
-                        try (PreparedStatement ps = con.prepareStatement(rsql)) {
-                            ps.setString(1, rid);
-                            ps.setString(2, currentUser);
-                            ps.setString(3, targetId);
-                            ps.executeUpdate();
-                        }
-                    }
-                    // 비밀 계정에서는 여기서 실제 followings/follower에 넣지 않음
-                    // 계정주가 나중에 승인해야 진짜 팔로우가 됨
-
-                } else {
-                    // 공개 계정  → 즉시 팔로우 (기존 로직)
-                    String fid1 = "fw" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-                    String fid2 = "fr" + UUID.randomUUID().toString().replace("-", "").substring(0, 8);
-
-                    String ins1 =
-                        "INSERT INTO followings (f_id, user_id, follower_id) " +
-                        "VALUES (?, ?, ?)";
-                    try (PreparedStatement ps = con.prepareStatement(ins1)) {
-                        ps.setString(1, fid1);
-                        ps.setString(2, currentUser);
-                        ps.setString(3, targetId);
-                        ps.executeUpdate();
-                    }
-
-                    String ins2 =
-                        "INSERT INTO follower (f_id, user_id, follower_id) " +
-                        "VALUES (?, ?, ?)";
-                    try (PreparedStatement ps = con.prepareStatement(ins2)) {
-                        ps.setString(1, fid2);
-                        ps.setString(2, currentUser); // 내가 팔로우한 사람  (팔로워 목록 기준 user_id)
-                        ps.setString(3, targetId);    // 내가 팔로우하는 대상
-                        // 만약 기존 설계에서 user_id = 대상, follower_id = 나 였다면 이 부분은
-                        // ps.setString(2, targetId);
-                        // ps.setString(3, currentUser);
-                        // 로 맞춰줘야 함  (실제 테이블 구조에 따라)
-                        ps.executeUpdate();
-                    }
+                // [C-2] 공개 계정 -> 즉시 팔로우 (날짜 제거함)
+                String followId = "f" + UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+                String insFollow = "INSERT INTO followings (f_id, user_id, follower_id) VALUES (?, ?, ?)";
+                try (PreparedStatement ps = con.prepareStatement(insFollow)) {
+                    ps.setString(1, followId);
+                    ps.setString(2, targetId);
+                    ps.setString(3, currentUser);
+                    ps.executeUpdate();
                 }
             }
-
-            con.commit();
-            con.setAutoCommit(oldAuto);
-        } catch (Exception e) {
-            con.rollback();
-            con.setAutoCommit(true);
-            throw e;
         }
 
     } catch (Exception e) {
         e.printStackTrace();
+        String errorMsg = e.getMessage();
+        if (errorMsg == null) errorMsg = "Unknown Error";
+        errorMsg = errorMsg.replace("'", "").replace("\"", "").replace("\n", " ");
+%>
+    <script>
+        alert("처리 중 오류 발생: <%= errorMsg %>");
+        history.back();
+    </script>
+<%
+        return;
     } finally {
-        if (con != null) {
-            try { con.close(); } catch (Exception ignore) {}
-        }
+        if (con != null) try { con.close(); } catch(Exception e) {}
     }
 
-    // 원래 보던 페이지로 되돌아가기
-    String referer = request.getHeader("Referer");
-    if (referer == null || referer.length() == 0) {
-        referer = "profile.jsp?user=" + URLEncoder.encode(targetId, "UTF-8");
-    }
     response.sendRedirect(referer);
 %>

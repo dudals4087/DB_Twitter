@@ -1,15 +1,16 @@
-/* 기본 레이아웃 */
-
+/* =========================================
+   1. GLOBAL RESET & BASIC FONTS
+   ========================================= */
 html, body {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #050505;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
+    color: #0f1419;
 }
 
 a {
-    color: #1877f2;
+    color: #1d9bf0; /* Twitter Blue */
     text-decoration: none;
 }
 
@@ -17,8 +18,193 @@ a:hover {
     text-decoration: underline;
 }
 
-/* 앱 전체 틀 */
+/* =========================================
+   2. LOGIN & SIGNUP PAGE STYLES (New X Style)
+   ========================================= */
+.login-body {
+    background-color: #ffffff;
+    margin: 0;
+    overflow-x: hidden;
+}
 
+.login-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Left Side (Blue Background) */
+.login-left {
+    flex: 1.2;
+    background-color: #1d9bf0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.big-logo {
+    font-size: 300px;
+    color: #ffffff;
+}
+
+/* Right Side (Form) */
+.login-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    background-color: #ffffff;
+    min-width: 400px;
+}
+
+.login-content {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.heading-1 {
+    font-size: 64px;
+    font-weight: 900;
+    margin: 48px 0;
+    line-height: 1.2;
+    letter-spacing: -1px;
+}
+
+.heading-2 {
+    font-size: 31px;
+    font-weight: 800;
+    margin-bottom: 32px;
+}
+
+/* Login Form Inputs */
+.login-form {
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-group {
+    width: 100%;
+}
+
+.login-input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+    font-size: 15px;
+    border: 1px solid #cfd9de;
+    border-radius: 4px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.login-input:focus {
+    border-color: #1d9bf0;
+    box-shadow: 0 0 0 1px #1d9bf0;
+}
+
+.btn-login-submit {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    background-color: #1d9bf0;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-login-submit:hover {
+    background-color: #1a8cd8;
+}
+
+/* Divider & Signup */
+.divider {
+    max-width: 380px;
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.divider::before, .divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #eff3f4;
+}
+
+.divider span {
+    padding: 0 10px;
+    font-size: 14px;
+    color: #536471;
+}
+
+.signup-prompt {
+    max-width: 380px;
+    margin-top: 20px;
+}
+
+.signup-prompt p {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.btn-signup-outline {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    background-color: white;
+    color: #1d9bf0;
+    border: 1px solid #cfd9de;
+    border-radius: 30px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-signup-outline:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+}
+
+.mobile-logo { display: none; }
+
+@media (max-width: 1000px) {
+    .login-container { flex-direction: column; }
+    .login-left { display: none; }
+    .mobile-logo {
+        display: block;
+        font-size: 40px;
+        color: #1d9bf0;
+        margin-bottom: 20px;
+    }
+    .heading-1 { font-size: 40px; margin: 20px 0; }
+    .login-right { padding: 20px; }
+}
+
+.login-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+    background-color: white;
+    font-size: 12px;
+    color: #536471;
+}
+
+/* =========================================
+   3. MAIN APP LAYOUT (Timeline, Header)
+   ========================================= */
 .app-shell {
     min-height: 100vh;
 }
@@ -28,15 +214,16 @@ a:hover {
     top: 0;
     z-index: 100;
     height: 56px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #dddfe2;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid #eff3f4;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
+    backdrop-filter: blur(12px);
 }
 
-.app-header-left {
+.app-header-left, .app-header-right {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -45,711 +232,661 @@ a:hover {
 .app-logo {
     font-size: 24px;
     font-weight: 800;
-    color: #1877f2;
+    color: #1d9bf0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .app-logo-sub {
     font-size: 13px;
-    color: #65676b;
-}
-
-.app-header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #536471;
 }
 
 .icon-btn {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    border: none;
-    background-color: #e4e6eb;
+    border: 1px solid transparent;
+    background-color: transparent;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    color: #050505;
+    font-size: 16px;
+    color: #0f1419;
     cursor: pointer;
     text-decoration: none;
+    transition: 0.2s;
 }
 
 .icon-btn:hover {
-    background-color: #d8dadf;
+    background-color: #eff3f4;
 }
 
-/* 메인 2컬럼 레이아웃 */
-
+/* Layout Grid */
 .main-layout {
     max-width: 1120px;
-    margin: 16px auto;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: minmax(0, 640px) 320px;
-    gap: 16px;
+    grid-template-columns: minmax(0, 640px) 350px;
+    gap: 30px;
+    padding-top: 10px;
 }
 
 .column-center {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    border-left: 1px solid #eff3f4;
+    border-right: 1px solid #eff3f4;
+    min-height: 100vh;
 }
 
 .column-right {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    padding-top: 10px;
 }
 
-/* 카드 공통 */
-
+/* Cards */
 .card {
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    padding: 12px 14px;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 16px;
+    border-bottom: 1px solid #eff3f4;
+}
+
+.column-right .card {
+    background-color: #f7f9f9;
+    border-radius: 16px;
+    border: none;
 }
 
 .section-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #0f1419;
 }
 
 .helper-text {
-    font-size: 12px;
-    color: #65676b;
+    font-size: 13px;
+    color: #536471;
     line-height: 1.5;
 }
 
-/* 버튼들 */
-
-.btn-primary,
-.btn-secondary,
-.btn-ghost,
-.btn-danger,
-.btn-tab,
-.btn-sm,
-.btn-xs,
-.chat-send-btn {
+/* Buttons */
+.btn-primary, .btn-secondary, .btn-ghost, .btn-danger, .btn-tab, .btn-sm, .btn-xs, .chat-send-btn {
     font-family: inherit;
+    font-weight: 700;
+    transition: 0.2s;
 }
 
 .btn-primary {
-    background-color: #1877f2;
+    background-color: #1d9bf0;
     color: #ffffff;
     border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 14px;
+    border-radius: 9999px;
+    padding: 8px 16px;
+    font-size: 15px;
     cursor: pointer;
 }
-
 .btn-primary:hover {
-    background-color: #166fe0;
+    background-color: #1a8cd8;
 }
 
 .btn-secondary {
-    background-color: #42b72a;
+    background-color: #0f1419;
     color: #ffffff;
     border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 13px;
+    border-radius: 9999px;
+    padding: 8px 16px;
+    font-size: 14px;
     cursor: pointer;
 }
-
 .btn-secondary:hover {
-    background-color: #36a420;
+    background-color: #272c30;
 }
 
 .btn-ghost {
-    background-color: #e4e6eb;
-    color: #050505;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 13px;
+    background-color: transparent;
+    color: #536471;
+    border: 1px solid #cfd9de;
+    border-radius: 9999px;
+    padding: 6px 16px;
+    font-size: 14px;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
 }
-
 .btn-ghost:hover {
-    background-color: #d8dadf;
+    background-color: #eff3f4;
 }
 
 .btn-danger {
-    background-color: #e41e3f;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
+    background-color: transparent;
+    color: #f4212e;
+    border: 1px solid #fbdeb1;
+    border-radius: 9999px;
+    padding: 6px 16px;
     font-size: 13px;
     cursor: pointer;
 }
-
 .btn-danger:hover {
-    background-color: #c81535;
+    background-color: #fef2f2;
 }
 
-.btn-sm {
-    padding: 4px 10px;
-    font-size: 12px;
-}
+.btn-sm { padding: 6px 12px; font-size: 13px; }
+.btn-xs { padding: 4px 10px; font-size: 12px; }
 
-.btn-xs {
-    padding: 2px 8px;
-    font-size: 11px;
-}
-
-/* 탭 버튼 (팔로워/팔로잉) */
-
+/* Tabs */
 .btn-tab {
     display: inline-block;
-    padding: 6px 10px;
-    border-radius: 16px;
-    border: 1px solid transparent;
-    background-color: #e4e6eb;
-    font-size: 12px;
-    color: #050505;
-    text-decoration: none;
+    padding: 10px 0;
+    margin-right: 20px;
+    background-color: transparent;
+    font-size: 15px;
+    color: #536471;
+    font-weight: 600;
+    border-radius: 0;
+    border-bottom: 4px solid transparent;
 }
-
 .btn-tab.active {
-    background-color: #1877f2;
-    border-color: #1877f2;
-    color: #ffffff;
+    background-color: transparent;
+    color: #0f1419;
+    border-color: #1d9bf0;
 }
 
-/* 아바타 */
-
-.avatar-sm,
-.avatar-lg {
+/* Avatars & Badges */
+.avatar-sm, .avatar-lg {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    background-color: #e4e6eb;
-    color: #050505;
+    background-color: #eff3f4;
+    color: #536471;
     font-weight: 700;
+    object-fit: cover;
 }
-
-.avatar-sm {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-}
-
-.avatar-lg {
-    width: 64px;
-    height: 64px;
-    font-size: 24px;
-}
-
-.avatar-sm-link {
-    display: inline-block;
-    text-decoration: none;
-}
-
-/* 체크 배지 */
+.avatar-sm { width: 40px; height: 40px; font-size: 14px; }
+.avatar-lg { width: 64px; height: 64px; font-size: 24px; }
+.avatar-sm-link { display: inline-block; text-decoration: none; }
 
 .badge-check {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #42b72a;
+    background-color: #1d9bf0;
     color: #ffffff;
-    border-radius: 999px;
-    padding: 0 6px;
-    font-size: 11px;
-    font-weight: 700;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 8px;
+    margin-left: 4px;
+    vertical-align: middle;
 }
 
-/* 입력 폼 */
-
-.form-field {
-    margin-bottom: 8px;
-}
-
-.form-label {
-    font-size: 13px;
-    margin-bottom: 4px;
-    color: #050505;
-}
-
+/* Forms */
+.form-field { margin-bottom: 12px; }
+.form-label { font-size: 14px; margin-bottom: 6px; color: #0f1419; font-weight: 600; }
 .input-text {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid #ccd0d5;
-    font-size: 13px;
+    width: 100%; box-sizing: border-box; padding: 12px;
+    border-radius: 4px; border: 1px solid #cfd9de;
+    font-size: 15px; outline: none;
+}
+.input-text:focus { border-color: #1d9bf0; border-width: 2px; padding: 11px; }
+
+/* Post Input */
+.post-input, textarea.post-input {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    border-bottom: 1px solid #eff3f4 !important;
+    border-radius: 0 !important;
+    padding: 12px 0 !important;
+    font-size: 18px !important;
+    background-color: transparent !important;
+    height: 100px !important;
+    resize: none !important;
     outline: none;
 }
 
-.input-text:focus {
-    border-color: #1877f2;
-}
-
-/* 글 작성 텍스트 박스  고정 높이 */
-
-.post-input {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ccd0d5;
-    border-radius: 16px;
-    padding: 10px 12px;
-    font-size: 14px;
-    outline: none;
-    background-color: #f0f2f5;
-    height: 120px;      /* 길게 고정 */
-    resize: none;       /* 크기 조절 불가 */
-    overflow-y: auto;   /* 내용 많으면 내부 스크롤 */
-}
-
-/* 댓글 입력 */
-
+/* Comments */
 .comment-input {
-    flex: 1;
-    box-sizing: border-box;
-    padding: 6px 8px;
-    border-radius: 16px;
-    border: 1px solid #ccd0d5;
-    font-size: 13px;
-    outline: none;
-    background-color: #f0f2f5;
+    flex: 1; box-sizing: border-box; padding: 8px 12px;
+    border-radius: 9999px; border: 1px solid #eff3f4;
+    font-size: 14px; outline: none; background-color: #eff3f4;
 }
-
-.comment-input:focus {
-    border-color: #1877f2;
-}
-
+.comment-input:focus { background-color: #ffffff; border-color: #1d9bf0; }
 .comment-btn {
-    border: none;
-    background-color: #1877f2;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 4px 10px;
-    font-size: 12px;
-    cursor: pointer;
+    border: none; background-color: #1d9bf0; color: #ffffff;
+    border-radius: 9999px; padding: 6px 12px; font-size: 13px; font-weight: 700; cursor: pointer;
 }
 
-/* 포스트 카드 */
-
+/* Post Cards */
 .post-card {
-    border-top: 1px solid #e4e6eb;
-    padding-top: 8px;
-    margin-top: 8px;
+    border-top: 1px solid #eff3f4;
+    padding: 12px 16px;
+    margin-top: 0;
+    cursor: pointer;
+    transition: 0.2s;
 }
+.post-card:hover { background-color: rgba(0, 0, 0, 0.03); }
 
-.post-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.post-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.post-user { display: flex; gap: 10px; align-items: flex-start; }
+.post-username-row { display: flex; align-items: center; gap: 4px; font-size: 15px; font-weight: 700; }
+.username-link { color: #0f1419; }
+.post-meta { font-size: 14px; color: #536471; font-weight: 400; margin-left: 4px; }
+.post-content { margin-top: 4px; font-size: 15px; line-height: 1.5; white-space: pre-wrap; color: #0f1419; }
+.post-footer { margin-top: 8px; font-size: 13px; color: #536471; }
+
+.comment-preview { margin-top: 8px; border-top: none; padding-top: 6px; }
+.comment-form-row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+
+/* Suggestions */
+.user-suggest-item, .user-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: none;
+    transition: 0.2s;
 }
+.user-suggest-item:hover { background-color: rgba(0,0,0,0.03); }
+.user-name-row { display: flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; }
+.user-status { font-size: 13px; color: #536471; }
 
-.post-user {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.post-username-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.username-link {
-    color: #050505;
-}
-
-.post-meta {
-    font-size: 13px;
-    color: #65676b;
-}
-
-.post-content {
-    margin-top: 6px;
-    font-size: 15px;
-    line-height: 1.5;
-    white-space: pre-wrap;
-}
-
-.post-footer {
-    margin-top: 6px;
-    font-size: 12px;
-    color: #65676b;
-}
-
-/* 댓글 프리뷰 (타임라인 아래쪽) */
-
-.comment-preview {
-    margin-top: 6px;
-    border-top: 1px solid #e4e6eb;
-    padding-top: 6px;
-}
-
-.comment-form-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* 유저 추천 / 팔로우 리스트 카드 공통 */
-
-.user-suggest-item,
-.user-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    border-bottom: 1px solid #f0f2f5;
-}
-
-.user-suggest-item:last-child,
-.user-item:last-child {
-    border-bottom: none;
-}
-
-.user-suggest-main {
-    flex: 1;
-    min-width: 0;
-}
-
-.user-name-row {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.user-status {
-    font-size: 11px;
-    color: #65676b;
-}
-
-/* 메시지 레이아웃 */
-
+/* Messages */
 .messages-layout {
-    max-width: 1120px;
-    margin: 16px auto;
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    gap: 16px;
+    max-width: 1120px; margin: 0 auto;
+    display: grid; grid-template-columns: 350px minmax(0, 1fr);
+    gap: 0; border: 1px solid #eff3f4; height: 90vh;
+}
+.messages-left, .messages-right {
+    background-color: #ffffff; border-radius: 0;
+    box-shadow: none; border-right: 1px solid #eff3f4;
+    height: 100%;
+}
+.list-header { padding: 12px 16px; border-bottom: 1px solid #eff3f4; font-size: 18px; font-weight: 800; }
+.user-item.active { background-color: #eff3f4; border-right: 2px solid #1d9bf0; border-radius: 0; }
+
+.chat-header { padding: 10px 16px; border-bottom: 1px solid #eff3f4; }
+.chat-row { margin-bottom: 8px; }
+.chat-bubble { max-width: 70%; padding: 10px 14px; border-radius: 20px; font-size: 14px; }
+.chat-bubble.me { background-color: #1d9bf0; color: #ffffff; border-bottom-right-radius: 4px; }
+.chat-bubble.other { background-color: #eff3f4; color: #0f1419; border-bottom-left-radius: 4px; }
+
+/* Like Button & Actions */
+.btn-like {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #536471;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-like:hover {
+    background-color: rgba(249, 24, 128, 0.1);
+    color: #f91880;
+}
+.btn-like.liked { color: #f91880; }
+
+.post-actions-bar {
+    margin-top: 8px; padding-top: 8px; border-top: 1px solid #eff3f4;
+    display: flex; justify-content: space-around;
+}
+.post-like-btn-inline {
+    background: transparent; border: none;
+    color: #536471; font-size: 18px;
+    cursor: pointer; border-radius: 50%; width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    transition: 0.2s;
+}
+.post-like-btn-inline:hover {
+    background-color: rgba(249, 24, 128, 0.1);
+    color: #f91880;
 }
 
-.messages-left {
+/* =========================================
+   4. SEARCH PAGE STYLES (Rounded Bar)
+   ========================================= */
+.search-container {
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    display: flex;
-    flex-direction: column;
-    height: calc(100vh - 88px);
-    min-height: 480px;
+    padding: 10px 0;
+    position: sticky;
+    top: 56px;
+    z-index: 90;
 }
 
+.search-bar-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon-inside {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #536471;
+}
+
+.search-input-rounded {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    background-color: #eff3f4; /* 연한 회색 */
+    border-radius: 9999px; /* 둥글게 */
+    padding: 12px 12px 12px 45px; /* 아이콘 공간 */
+    font-size: 15px;
+    outline: none;
+    color: #0f1419;
+}
+
+.search-input-rounded:focus {
+    background-color: #ffffff;
+    border-color: #1d9bf0;
+    box-shadow: 0 0 0 1px #1d9bf0;
+}
+
+/* Empty Search Result */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #536471;
+}
+.empty-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+    color: #1d9bf0;
+}
+
+/* =========================================
+   5. ALERT MESSAGE BOX (Signup/Login Error)
+   ========================================= */
+.msg-box {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+}
+.msg-ok { background-color: #e7f3ff; color: #1d9bf0; } /* 성공: 파랑 */
+.msg-err { background-color: #fef2f2; color: #f4212e; } /* 실패: 빨강 */
+
+/* --- 채팅(메시지) 페이지 전용 스타일 --- */
+
+/* 오른쪽 채팅 영역 전체 틀 (Flexbox 사용) */
 .messages-right {
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     display: flex;
-    flex-direction: column;
-    height: calc(100vh - 88px);
-    min-height: 480px;
+    flex-direction: column; /* 세로 정렬 */
+    height: calc(100vh - 56px); /* 헤더 제외한 전체 높이 */
 }
 
-.list-header {
-    padding: 10px 12px;
-    border-bottom: 1px solid #e4e6eb;
-    font-size: 13px;
-    font-weight: 700;
-}
-
-.user-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 12px;
-}
-
-.user-item.active {
-    background-color: #e7f3ff;
-    border-radius: 8px;
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
-/* 채팅 영역 */
-
+/* 채팅 헤더 (상대방 이름) */
 .chat-header {
-    padding: 10px 12px;
-    border-bottom: 1px solid #e4e6eb;
+    padding: 10px 16px;
+    border-bottom: 1px solid #eff3f4;
+    background-color: rgba(255, 255, 255, 0.95);
+    flex-shrink: 0; /* 크기 줄어들지 않음 */
 }
 
-.chat-title {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.chat-subtitle {
-    font-size: 12px;
-    color: #65676b;
-    margin-top: 2px;
-}
-
+/* 채팅 내용 영역 (스크롤 생기는 곳) */
 .chat-body {
-    flex: 1;
-    padding: 10px 12px;
-    overflow-y: auto;
+    flex: 1; /* 남은 공간 모두 차지 */
+    overflow-y: auto; /* 내용 많으면 스크롤 */
+    padding: 20px 16px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 10px; /* 말풍선 사이 간격 */
 }
 
+/* 말풍선 한 줄 (좌우 정렬용) */
 .chat-row {
     display: flex;
     width: 100%;
 }
+.chat-row.me { justify-content: flex-end; }   /* 나는 오른쪽 정렬 */
+.chat-row.other { justify-content: flex-start; } /* 상대는 왼쪽 정렬 */
 
-.chat-row.me {
-    justify-content: flex-end;
-}
-
-.chat-row.other {
-    justify-content: flex-start;
-}
-
+/* 진짜 말풍선 디자인 */
 .chat-bubble {
-    max-width: 70%;
-    padding: 6px 10px;
-    border-radius: 16px;
-    font-size: 13px;
+    max-width: 70%;      /* 최대 70%까지만 커짐 */
+    width: fit-content;  /* [핵심] 글자 양만큼만 크기 조절! */
+    padding: 10px 14px;
+    border-radius: 20px;
+    font-size: 15px;
     line-height: 1.4;
-    word-break: break-word;
+    word-break: break-word; /* 긴 단어 줄바꿈 */
 }
-
 .chat-bubble.me {
-    background-color: #0084ff;
+    background-color: #1d9bf0; /* 파란색 */
     color: #ffffff;
-    border-bottom-right-radius: 4px;
+    border-bottom-right-radius: 4px; /* 말풍선 꼬리 느낌 */
 }
-
 .chat-bubble.other {
-    background-color: #e4e6eb;
-    color: #050505;
+    background-color: #eff3f4; /* 회색 */
+    color: #0f1419;
     border-bottom-left-radius: 4px;
 }
 
-.chat-meta {
-    font-size: 11px;
-    color: #65676b;
-    margin-top: 2px;
-}
-
-.chat-meta.me {
-    text-align: right;
-}
-
-.chat-meta.other {
-    text-align: left;
-}
-
+/* 맨 아래 입력창 영역 */
 .chat-input-bar {
-    border-top: 1px solid #e4e6eb;
-    padding: 8px 10px;
+    padding: 12px 16px;
+    border-top: 1px solid #eff3f4;
+    background-color: #ffffff;
+    flex-shrink: 0;
 }
 
 .chat-input-form {
     display: flex;
-    gap: 6px;
-}
-
-.chat-input {
-    flex: 1;
-    box-sizing: border-box;
-    padding: 6px 8px;
-    border-radius: 16px;
-    border: 1px solid #ccd0d5;
-    font-size: 13px;
-    outline: none;
-    background-color: #f0f2f5;
-}
-
-.chat-input:focus {
-    border-color: #1877f2;
-}
-
-.chat-send-btn {
-    border: none;
-    background-color: #1877f2;
-    color: #ffffff;
-    border-radius: 16px;
-    padding: 4px 12px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-/* 메시지 박스 */
-
-.msg {
-    margin-top: 6px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-}
-
-.msg-ok {
-    background-color: #e7f3ff;
-    color: #1d3c78;
-}
-
-.msg-err {
-    background-color: #fdecea;
-    color: #b3261e;
-}
-
-/* 링크 스타일 */
-
-.link-plain {
-    color: #050505;
-    text-decoration: none;
-}
-
-.link-plain:hover {
-    text-decoration: underline;
-}
-
-/* 메인 글쓰기 박스 강제 스타일 */
-textarea.post-input {
-    width: 100% !important;
-    box-sizing: border-box !important;
-    border: 1px solid #ccd0d5 !important;
-    border-radius: 16px !important;
-    padding: 10px 12px !important;
-    font-size: 14px !important;
-    background-color: #f0f2f5 !important;
-    height: 120px !important;      /* 길게 고정 */
-    resize: none !important;       /* 크기 조절 불가 */
-    overflow-y: auto !important;   /* 내용 많으면 내부 스크롤 */
-}
-
-/* 포스트 하단 메타 줄 */
-
-.post-footer-row {
-    margin-top: 6px;
-    font-size: 13px;
-    color: #65676b;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.post-meta-item {
-    display: inline-flex;
     align-items: center;
+    gap: 8px;
+    background-color: #eff3f4;
+    border-radius: 9999px;
+    padding: 4px 4px 4px 16px; /* 안쪽 여백 */
+}
+
+/* 입력 Input 디자인 */
+.chat-input-text {
+    flex: 1; /* 가로로 꽉 차게 */
+    border: none;
+    background: transparent;
+    font-size: 15px;
+    outline: none;
+    padding: 8px 0;
+}
+
+/* 전송 버튼 (종이비행기 아이콘) */
+.btn-send {
+    border: none;
+    background-color: transparent;
+    color: #1d9bf0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+    font-size: 16px;
+}
+.btn-send:hover {
+    background-color: rgba(29, 155, 240, 0.1);
+}
+/* --- 설정 페이지 - 입력창 내부 아이콘 스타일 --- */
+.input-wrapper-icon {
+    position: relative; /* 자식 아이콘을 고정할 기준점 */
+}
+
+.icon-inside-input {
+    position: absolute;
+    left: 10px; /* 왼쪽에서 10px 위치 */
+    top: 50%;
+    transform: translateY(-50%); /* 세로 중앙 정렬 */
+    color: #536471;
+    font-size: 14px;
+    z-index: 2;
+}
+
+.input-text.has-icon {
+    padding-left: 35px; /* 아이콘 공간만큼 텍스트를 오른쪽으로 밀기 */
+}
+/* --- 새로운 프로필 레이아웃 --- */
+.profile-container {
+    background-color: #000; /* 전체 배경을 검정으로 (X와 유사하게) */
+    color: #fff; /* 기본 글자색 흰색 */
+    min-height: calc(100vh - 50px); /* 헤더 제외 최소 높이 */
+}
+
+.profile-header-banner {
+    width: 100%;
+    height: 200px; /* 배너 높이 */
+    background-color: #333; /* 배너 이미지 없을 때 기본 배경색 */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-bottom: 1px solid #2f3336;
+}
+
+.profile-avatar-overlay {
+    position: absolute;
+    bottom: -60px; /* 배너와 겹치도록 위치 조정 */
+    left: 16px;
+    width: 120px; /* 프로필 이미지 크기 */
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid #000; /* 검정색 테두리 */
+    background-color: #1a1a1a; /* 이미지 없을 때 기본 배경색 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    font-weight: bold;
+    color: #fff;
+    overflow: hidden; /* 이미지 오버플로우 방지 */
+}
+
+.profile-avatar-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-content-area {
+    padding: 16px;
+    padding-top: 70px; /* 아바타 겹치는 공간 확보 */
+    border-bottom: 1px solid #2f3336;
+}
+
+.profile-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.profile-username-section {
+    display: flex;
+    flex-direction: column;
     gap: 4px;
 }
 
-.post-meta-link {
-    font-size: 12px;
-    color: #1877f2;
+.profile-username {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
 }
 
-/* 포스트 액션 바  좋아요 + 댓글 입력 */
-
-.post-actions-bar {
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px solid #e4e6eb;
+.profile-userid {
+    font-size: 15px;
+    color: #71767b;
 }
 
+.profile-edit-btn {
+    padding: 8px 16px;
+    border-radius: 9999px;
+    border: 1px solid #536471;
+    background-color: transparent;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.profile-edit-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-status-message {
+    font-size: 15px;
+    color: #fff;
+    margin-top: 12px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.profile-stats-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 12px;
+}
+.profile-stats-row a {
+    color: #71767b;
+    font-size: 15px;
+    text-decoration: none;
+}
+.profile-stats-row a strong {
+    color: #fff;
+}
+.profile-stats-row a:hover {
+    text-decoration: underline;
+}
+
+/* --- 프로필 탭 메뉴 --- */
+.profile-tabs {
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid #2f3336;
+    background-color: #000; /* 탭 배경색 */
+}
+.profile-tab-item {
+    flex: 1;
+    text-align: center;
+    padding: 16px 0;
+    color: #71767b;
+    font-weight: bold;
+    text-decoration: none;
+    position: relative;
+    transition: background-color 0.2s, color 0.2s;
+}
+.profile-tab-item:hover {
+    background-color: #080808; /* 호버 시 배경색 */
+    color: #fff;
+}
+.profile-tab-item.active {
+    color: #fff;
+}
+.profile-tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px; /* 활성 탭 밑줄 길이 */
+    height: 4px;
+    background-color: #1da1f2; /* 활성 탭 밑줄 색상 */
+    border-radius: 2px;
+}
 .post-actions-row {
     display: flex;
+    justify-content: flex-start; /* 기존과 동일하게 왼쪽 정렬 유지 */
     align-items: center;
-    gap: 6px;
+    width: 100%;
 }
-
-.post-like-btn-inline {
-    border: none;
-    background: transparent;
-    color: #65676b;
-    font-size: 12px;
-    padding: 4px 10px;
-    border-radius: 16px;
-    cursor: pointer;
-}
-
-.post-like-btn-inline:hover {
-    background-color: #e4e6eb;
-}
-
-.post-comment-inline {
-    flex: 1;
+/* ... 다른 CSS 설정 ... */
+.post-action-btn-group { /* 하트, 댓글 묶음 */
     display: flex;
-    gap: 6px;
-    margin: 0;
-}
-
-.comment-text {
-    font-size: 15px;
-    line-height: 1.6;
-}
-
-/* 공통 좋아요 버튼: 초록색 배경 + 흰 글씨 */
-.btn-like {
-    display: inline-block;
-    padding: 4px 12px;
-    border: none;
-    border-radius: 999px;
-    background-color: #42b72a; /* 초록색 */
-    color: #ffffff;           /* 흰색 글씨 */
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    line-height: 1.2;
-}
-
-.btn-like.btn-xs {
-    padding: 3px 10px;
-    font-size: 11px;
-}
-
-.btn-like:hover {
-    background-color: #36a420;
-}
-
-/* 댓글 들여쓰기용 대댓글 영역 */
-.reply-item {
-    margin-left: 40px;   /* 들여쓰기 */
-    margin-top: 8px;
-}
-
-/* 공통 버튼 스타일이 이미 있다고 가정 */
-.btn-danger {
-    background-color: #e53935;   /* 진한 빨강 */
-    color: #ffffff;
-    border: none;
-    border-radius: 999px;        /* 다른 버튼처럼 pill 형태 */
-    padding: 4px 12px;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.btn-danger:hover {
-    background-color: #c62828;   /* hover 시 조금 더 진하게 */
-}
-
-/* 작은 삭제 버튼용 */
-.btn-danger.btn-xs {
-    padding: 2px 8px;
-    font-size: 11px;
-}
-
-/* 글 삭제 버튼(조금 더 크게) */
-.btn-danger.btn-sm {
-    padding: 4px 14px;
-    font-size: 12px;
+    align-items: center;
+    gap: 20px; /* 하트와 댓글 사이 간격 조정 (대칭 중앙 배치 효과를 위해) */
 }

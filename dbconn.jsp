@@ -8,9 +8,9 @@
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         // DB 연결 정보
-        String url  = "jdbc:mysql://localhost:3306/twitter?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
+        String url = "jdbc:mysql://localhost:3306/twitter?serverTimezone=Asia/Seoul";
         String user = "root";
-        String pass = "12345";
+        String pass = "qwer11559900";
 
         // 커넥션 생성
         con = DriverManager.getConnection(url, user, pass);

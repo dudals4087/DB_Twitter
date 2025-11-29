@@ -124,6 +124,7 @@
     <meta charset="UTF-8">
     <title>댓글 좋아요 오류  TWITTER_DB4</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="app-shell">

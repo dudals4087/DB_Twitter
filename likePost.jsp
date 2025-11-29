@@ -1,149 +1,94 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
+         import="java.util.UUID, java.sql.*" %>
 <%@ include file="dbconn.jsp" %>
 <%
     request.setCharacterEncoding("UTF-8");
 
-    // 세션 정보
     String currentUser = (String) session.getAttribute("currentUser");
-    Boolean currentPaid = (Boolean) session.getAttribute("currentUserPaid");
-    if (currentPaid == null) currentPaid = false;
+    String postId = request.getParameter("post_id");
 
-    // 로그인 안 되어 있으면 로그인 페이지로
     if (currentUser == null) {
-        if (con != null) {
-            try { con.close(); } catch (Exception ignore) {}
-        }
         response.sendRedirect("login.jsp");
         return;
     }
-
-    // POST가 아니면 메인으로
-    if (!"POST".equalsIgnoreCase(request.getMethod())) {
-        if (con != null) {
-            try { con.close(); } catch (Exception ignore) {}
-        }
-        response.sendRedirect("main.jsp");
+    
+    if (postId == null || postId.trim().isEmpty()) {
+        out.println("<script>history.back();</script>");
         return;
     }
 
-    String postId = request.getParameter("post_id");
-    if (postId == null) postId = "";
-    postId = postId.trim();
-
-    // 기본 리다이렉트는 해당 게시글 상세 페이지
-    String redirectUrl = "postDetail.jsp?post_id=" + postId;
+    String referer = request.getHeader("Referer");
+    if (referer == null || referer.isEmpty()) {
+        referer = "main.jsp";
+    }
+    
+    // [중요] 기존 앵커(#) 제거 (새로 붙이기 위해)
+    if (referer.contains("#")) {
+        referer = referer.substring(0, referer.indexOf("#"));
+    }
 
     String msg = null;
-    boolean ok = false;
 
-    if (postId.isEmpty()) {
-        msg = "어느 게시글에 좋아요를 눌러야 할지 알 수 없습니다";
-    } else {
-        try {
-            boolean oldAuto = con.getAutoCommit();
-            con.setAutoCommit(false);
-            try {
-                // 이미 좋아요 했는지 확인
-                boolean already = false;
-                String chkSql =
-                    "SELECT 1 FROM post_likes " +
-                    "WHERE post_id = ? AND liker_id = ?";
-                try (PreparedStatement ps = con.prepareStatement(chkSql)) {
-                    ps.setString(1, postId);
-                    ps.setString(2, currentUser);
-                    try (ResultSet rs = ps.executeQuery()) {
-                        if (rs.next()) {
-                            already = true;
-                        }
-                    }
-                }
-
-                if (!already) {
-                    // 좋아요 기록 insert
-                    String likeId = "pl" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 10);
-
-                    String insSql =
-                        "INSERT INTO post_likes (l_id, post_id, liker_id) " +
-                        "VALUES (?, ?, ?)";
-                    try (PreparedStatement ps = con.prepareStatement(insSql)) {
-                        ps.setString(1, likeId);
-                        ps.setString(2, postId);
-                        ps.setString(3, currentUser);
-                        ps.executeUpdate();
-                    }
-
-                    // 게시글 좋아요 수 증가
-                    String upSql =
-                        "UPDATE posts " +
-                        "SET num_of_likes = num_of_likes + 1 " +
-                        "WHERE post_id = ?";
-                    try (PreparedStatement ps = con.prepareStatement(upSql)) {
-                        ps.setString(1, postId);
-                        int n = ps.executeUpdate();
-                        if (n == 0) {
-                            throw new Exception("해당 post_id를 가진 게시글이 없습니다");
-                        }
-                    }
-                }
-
-                con.commit();
-                con.setAutoCommit(oldAuto);
-                ok = true;
-            } catch (Exception inner) {
-                con.rollback();
-                throw inner;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            msg = "좋아요를 처리하는 중 오류가 발생했어요";
-        } finally {
-            if (con != null) {
-                try { con.close(); } catch (Exception ignore) {}
+    try {
+        boolean already = false;
+        String chkSql = "SELECT 1 FROM post_likes WHERE post_id = ? AND liker_id = ?";
+        try (PreparedStatement ps = con.prepareStatement(chkSql)) {
+            ps.setString(1, postId);
+            ps.setString(2, currentUser);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) already = true;
             }
         }
-    }
 
-    if (ok) {
-        response.sendRedirect(redirectUrl);
-        return;
-    }
-%>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>게시글 좋아요 오류  TWITTER_DB4</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="app-shell">
-    <header class="app-header">
-        <div class="app-header-left">
-            <a href="main.jsp" class="app-logo">TWITTER_DB4</a>
-            <div class="app-logo-sub">게시글 좋아요 오류</div>
-        </div>
-    </header>
+        boolean oldAuto = con.getAutoCommit();
+        con.setAutoCommit(false);
 
-    <div class="center-layout">
-        <div class="auth-card">
-            <div class="auth-title">좋아요를 처리하지 못했습니다</div>
-            <div class="auth-sub">
-                다시 시도해 보거나, 아래 버튼을 눌러 게시글 화면으로 돌아갈 수 있습니다
-            </div>
-
-            <%
-                if (msg != null) {
-            %>
-                <div class="msg msg-err"><%= msg %></div>
-            <%
+        try {
+            if (already) {
+                // [UNLIKE]
+                String delSql = "DELETE FROM post_likes WHERE post_id = ? AND liker_id = ?";
+                try (PreparedStatement ps = con.prepareStatement(delSql)) {
+                    ps.setString(1, postId);
+                    ps.setString(2, currentUser);
+                    ps.executeUpdate();
                 }
-            %>
+                String downSql = "UPDATE posts SET num_of_likes = num_of_likes - 1 WHERE post_id = ?";
+                try (PreparedStatement ps = con.prepareStatement(downSql)) {
+                    ps.setString(1, postId);
+                    ps.executeUpdate();
+                }
+            } else {
+                // [LIKE] UUID 생성 로직 복구 완료!
+                String likeId = "pl" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 10);
+                String insSql = "INSERT INTO post_likes (l_id, post_id, liker_id) VALUES (?, ?, ?)";
+                try (PreparedStatement ps = con.prepareStatement(insSql)) {
+                    ps.setString(1, likeId);
+                    ps.setString(2, postId);
+                    ps.setString(3, currentUser);
+                    ps.executeUpdate();
+                }
+                String upSql = "UPDATE posts SET num_of_likes = num_of_likes + 1 WHERE post_id = ?";
+                try (PreparedStatement ps = con.prepareStatement(upSql)) {
+                    ps.setString(1, postId);
+                    ps.executeUpdate();
+                }
+            }
+            con.commit();
+            con.setAutoCommit(oldAuto);
 
-            <a href="<%= redirectUrl %>" class="btn-primary" style="width:100%; display:inline-block; text-align:center; margin-top:8px;">
-                게시글로 돌아가기
-            </a>
-        </div>
-    </div>
-</div>
-</body>
-</html>
+        } catch (Exception inner) {
+            con.rollback();
+            con.setAutoCommit(true);
+            throw inner;
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        msg = "오류 발생";
+    } finally {
+        if (con != null) { try { con.close(); } catch (Exception ignore) {} }
+    }
+
+    // [핵심] 처리가 끝나면 게시글 위치(#post-아이디)로 이동
+    response.sendRedirect(referer + "#post-" + postId);
+%>
